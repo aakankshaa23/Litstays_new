@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">SellVehicle</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_filter">filterActivity</string>
+    <string name="title_activity_n">n</string>
+    <string name="facebook_app_id">378115826164834</string>
+    <string name="And">\u0026</string>
+    <string name="fb_login_protocol_scheme">fb378115826164834</string>
+
+</resources>

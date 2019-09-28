@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#84ffff"
+    android:orientation="vertical">
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textSize="36sp"
+    android:textColor="@android:color/black"
+    android:fontFamily="@font/psr"
+    android:text="Edit"
+    android:layout_margin="16dp"
+    android:id="@+id/heading"/>
+<EditText
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:hint="Enter the updated value"
+    android:textColor="#F0181E34"
+    android:textColorHint="#F0181E34"
+    android:id="@+id/updated_value"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:hint="Enter the updated value"
+        android:textColor="#F0181E34"
+        android:textColorHint="#F0181E34"
+        android:id="@+id/confirm_updated_value"
+        android:visibility="gone"/>
+  <Button
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:background="@drawable/rounded_button"
+      android:backgroundTint="#F0181E34"
+      android:layout_gravity="center_horizontal"
+      android:text="Update"
+      android:id="@+id/confirm_update"
+      android:textColor="#84ffff"
+      android:textSize="16sp"
+      android:padding="16dp"
+      android:layout_marginBottom="16dp"/>
+</LinearLayout>
