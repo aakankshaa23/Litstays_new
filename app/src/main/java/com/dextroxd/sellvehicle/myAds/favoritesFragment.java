@@ -28,7 +28,7 @@ public class favoritesFragment extends Fragment {
     private ApiInterface mApiInterface;
     SharedPreferences preferences;
     List<Response> responses;
-    GridAdapter gridAdapter;
+    FavouriteAdapter favouriteAdapter;
 
     public favoritesFragment() {
         // Required empty public constructor
@@ -53,9 +53,9 @@ public class favoritesFragment extends Fragment {
             public void onResponse(Call<List<Response>> call, retrofit2.Response<List<Response>> response) {
                 List<Response> data = response.body();
                 responses = data;
-                gridAdapter = new GridAdapter(getActivity(),data);
-                recyclerView.setAdapter(gridAdapter);
-                gridAdapter.notifyDataSetChanged();
+                favouriteAdapter = new FavouriteAdapter(getActivity(),data);
+                recyclerView.setAdapter(favouriteAdapter);
+                favouriteAdapter.notifyDataSetChanged();
 
             }
 

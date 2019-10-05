@@ -122,12 +122,13 @@ public class ExploreFragment extends Fragment implements Animation.AnimationList
                 gridAdapter = new GridAdapter(context,data);
                 recyclerView.setAdapter(gridAdapter);
                 gridAdapter.notifyDataSetChanged();
-
+               // Toast.makeText(getActivity(), "Checking "+response.body().toString(), Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onFailure(Call<List<Response>> call, Throwable t) {
                 Log.d(TAG, "onFailure: "+t.getMessage());
+                Toast.makeText(getActivity(), "Failure - "+t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
         button.setOnClickListener(new View.OnClickListener(){
@@ -182,8 +183,9 @@ public class ExploreFragment extends Fragment implements Animation.AnimationList
                 gridAdapter = new GridAdapter(context,data);
 //                Log.e("DataofFilter",data.toString());
                 recyclerView.setAdapter(gridAdapter);
-                gridAdapter.setHasStableIds(true);
+//                gridAdapter.setHasStableIds(true);
                 gridAdapter.notifyDataSetChanged();
+
             }
 
             @Override

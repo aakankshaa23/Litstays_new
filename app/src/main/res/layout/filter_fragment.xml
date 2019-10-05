@@ -247,13 +247,28 @@
                     android:text="Fully" />
 
             </RadioGroup>
+            <EditText
+                android:id="@+id/location_filter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/radiogroup3"
+                android:layout_centerHorizontal="true"
+                android:textColor="#84FFFF"
+                android:fontFamily="@font/psr"
+                android:layout_marginTop="14dp"
+                android:textColorHint="#84ffff"
+                android:hint="Address"
+                android:backgroundTint="#84ffff"
+                android:textStyle="bold"
+                android:textSize="20dp" />
+
             <Button
                 android:id="@+id/apply_filter_button"
                 android:padding="10dp"
                 style="@android:style/Widget.Material.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/radiogroup3"
+                android:layout_below="@id/location_filter"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="16dp"
                 android:layout_centerHorizontal="true"

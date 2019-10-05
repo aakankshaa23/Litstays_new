@@ -109,6 +109,32 @@
                 android:textStyle="normal"
                 android:textColor="#84ffff"
                 android:textSize="26sp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
+
+
+                <TextView
+                    android:fontFamily="@font/psr"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:textStyle="normal"
+                    android:text="Address"
+                    android:textColor="#84ffff"
+                    android:textSize="16sp" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="#84ffff"
+                    android:textStyle="normal"
+                    android:id="@+id/location_sell"/>
+            </LinearLayout>
 
 
 

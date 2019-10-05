@@ -19,8 +19,8 @@ import java.util.ArrayList;
 public class cardActivity extends AppCompatActivity {
     MyCustomPagerAdapter myCustomPagerAdapter;
     ViewPager viewPager;
-    TextView type_sell,furnishing_sell,cost_sell,bedroom_sell,size_sell,facing_sell,floors_sell,bathroom_sell,bachelors_sell,parking_sell,description_sell;
-    String type,furnishing,cost,bedroom,size,facing,Desc,bathroom,floors;
+    TextView location_card,type_sell,furnishing_sell,cost_sell,bedroom_sell,size_sell,facing_sell,floors_sell,bathroom_sell,bachelors_sell,parking_sell,description_sell;
+    String type,furnishing,cost,bedroom,size,facing,Desc,bathroom,floors,location;
     Boolean parking,bachelors;
     int images[]={R.drawable.ic_location_on_white_24dp,R.drawable.ic_location_on_white_24dp,R.drawable.ic_location_on_white_24dp,R.drawable.ic_location_on_white_24dp};
 
@@ -42,6 +42,7 @@ public class cardActivity extends AppCompatActivity {
         viewPager = (ViewPager)findViewById(R.id.viewPager);
         Intent in=getIntent();
         type=in.getStringExtra("Type");
+        location=in.getStringExtra("Location");
         cost=in.getStringExtra("Cost");
         bedroom=in.getStringExtra("Bedroom");
         Toast.makeText(this,bedroom,Toast.LENGTH_SHORT).show();
@@ -62,6 +63,7 @@ public class cardActivity extends AppCompatActivity {
         bathroom_sell=findViewById(R.id.bathroom_sell);
         description_sell=findViewById(R.id.description_sell);
         floors_sell=findViewById(R.id.floor_sell);
+        location_card=findViewById(R.id.location_sell);
         bachelors_sell=findViewById(R.id.bachelors_Sell);
         parking_sell=findViewById(R.id.parking_sell);
         furnishing_sell=findViewById(R.id.furnishing_sell);
@@ -80,6 +82,7 @@ public class cardActivity extends AppCompatActivity {
         bedroom_sell.setText(" "+bedroom);
         size_sell.setText(" "+size);
         bedroom_sell.setText(bedroom);
+        location_card.setText(location);
         facing_sell.setText(" "+facing);
         bathroom_sell.setText(" "+bathroom);
         description_sell.setText(" "+Desc);

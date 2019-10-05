@@ -136,13 +136,13 @@ public class SignUpActivity extends AppCompatActivity {
         }
         else
         {
-            onSignUp(nameattr,emailattr,passatr,passatr,phoneattr);
+            onSignUp(nameattr,emailattr,passatr,phoneattr);
         }
 
 
     }
 
-    public void onSignUp(String name, String email, String password, String password2,String phone)
+    public void onSignUp(String name, String email, String password,String phone)
     {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("Name",name);
@@ -154,7 +154,7 @@ public class SignUpActivity extends AppCompatActivity {
         response.setName(name);
         response.setEmail(email);
         response.setPassword(password);
-        response.setPassword2(password2);
+        response.setPhone(phone);
         mApiInterface.saveUser(response).enqueue(new Callback<Response>() {
 
             @Override

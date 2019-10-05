@@ -15,10 +15,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dextroxd.sellvehicle.R;
+import com.dextroxd.sellvehicle.network.ApiInterface;
+import com.dextroxd.sellvehicle.network.ApiUtils;
+import com.dextroxd.sellvehicle.network.ModelSubmitforChangeofDetails.Response;
+
+import retrofit2.Call;
+import retrofit2.Callback;
 
 public class viewEditProfile extends AppCompatActivity {
     private SharedPreferences preferences;
     private EditText editText;
+    private ApiInterface mApiInterface;
     private EditText editText2;
     private int width,height;
     @Override
@@ -27,6 +34,7 @@ public class viewEditProfile extends AppCompatActivity {
         setContentView(R.layout.activity_view_edit_profile);
         Toolbar toolbar=findViewById(R.id.toolbar_view);
         setSupportActionBar(toolbar);
+        mApiInterface = ApiUtils.getAPIService();
         getSupportActionBar().setTitle("EDIT PROFILE");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -78,7 +86,7 @@ public class viewEditProfile extends AppCompatActivity {
                                               Toast.makeText(viewEditProfile.this,"Please enter new name",Toast.LENGTH_SHORT).show();
                                               return;
                                           }
-                                          updateName();
+                                          updateName(editText.getText().toString().trim());
                                           SharedPreferences.Editor editor = preferences.edit();
                                           editor.putString("Name",editText.getText().toString().trim());
                                           editor.apply();
@@ -88,7 +96,23 @@ public class viewEditProfile extends AppCompatActivity {
                                   });
         dialog.show();
     }
-    public void updateName(){}
+    public void updateName(String name){
+        Response response1 = new Response();
+        response1.setName(name);
+        mApiInterface.changeUserDetail(preferences.getString("auth_Token","hell"),response1).enqueue(new Callback<com.dextroxd.sellvehicle.network.GetDetails.Response>() {
+            @Override
+            public void onResponse(Call<com.dextroxd.sellvehicle.network.GetDetails.Response> call, retrofit2.Response<com.dextroxd.sellvehicle.network.GetDetails.Response> response) {
+            if(response.code() == 200)
+                Toast.makeText(viewEditProfile.this,"Success",Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(viewEditProfile.this, "Not Success", Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onFailure(Call<com.dextroxd.sellvehicle.network.GetDetails.Response> call, Throwable t) {
+                Toast.makeText(viewEditProfile.this,t.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
     public void dialogBoxPhone(){
         final Dialog dialog = new Dialog(viewEditProfile.this);
         dialog.setContentView(R.layout.dialog_phone_name);
@@ -108,7 +132,7 @@ public class viewEditProfile extends AppCompatActivity {
                     Toast.makeText(viewEditProfile.this,"Please enter new phone",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                updateNumber();
+                updateNumber(editText.getText().toString().trim());
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("Phone",editText.getText().toString().trim());
                 editor.apply();
@@ -119,7 +143,23 @@ public class viewEditProfile extends AppCompatActivity {
         dialog.show();
 
     }
-    public void updateNumber(){}
+    public void updateNumber(String phone){
+        Response response1 = new Response();
+        response1.setPhone(Long.parseLong(phone));
+        mApiInterface.changeUserDetail(preferences.getString("auth_Token","hell"),response1).enqueue(new Callback<com.dextroxd.sellvehicle.network.GetDetails.Response>() {
+            @Override
+            public void onResponse(Call<com.dextroxd.sellvehicle.network.GetDetails.Response> call, retrofit2.Response<com.dextroxd.sellvehicle.network.GetDetails.Response> response) {
+                if(response.code() == 200)
+                    Toast.makeText(viewEditProfile.this,"Success",Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(viewEditProfile.this, "Not Success", Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onFailure(Call<com.dextroxd.sellvehicle.network.GetDetails.Response> call, Throwable t) {
+                Toast.makeText(viewEditProfile.this,t.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
     public void dialogBoxPassword(){
         final Dialog dialog = new Dialog(viewEditProfile.this);
         dialog.setContentView(R.layout.dialog_phone_name);
@@ -141,12 +181,27 @@ public class viewEditProfile extends AppCompatActivity {
                     Toast.makeText(viewEditProfile.this,"Please enter new phone",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                updatePassword();
+                updatePassword(editText.getText().toString().trim());
                 dialog.dismiss();
             }
         });
         dialog.show();
 }
-    public void updatePassword(){
+    public void updatePassword(String password){
+        com.dextroxd.sellvehicle.network.PasswordChange.Response response1 = new com.dextroxd.sellvehicle.network.PasswordChange.Response();
+       response1.setPassword(password);
+        mApiInterface.createNewpassword(preferences.getString("auth_Token","hell"),response1).enqueue(new Callback<com.dextroxd.sellvehicle.network.RequestofId.Message.Response>() {
+            @Override
+            public void onResponse(Call<com.dextroxd.sellvehicle.network.RequestofId.Message.Response> call, retrofit2.Response<com.dextroxd.sellvehicle.network.RequestofId.Message.Response> response) {
+                if(response.body().getMessage().equals("success")){
+                    Toast.makeText(viewEditProfile.this,"Successfully Changed",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<com.dextroxd.sellvehicle.network.RequestofId.Message.Response> call, Throwable t) {
+
+            }
+        });
     }
 }

@@ -14,6 +14,17 @@ public class LoginResponse {
 	@SerializedName("email")
 	private String email;
 
+	@SerializedName("_id")
+	private String id;
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getId() {
+		return id;
+	}
+
 	public void setAuthToken(String authToken){
 		this.authToken = authToken;
 	}
@@ -44,7 +55,8 @@ public class LoginResponse {
 			"LoginResponse{" +
 			"authToken = '" + authToken + '\'' + 
 			",name = '" + name + '\'' + 
-			",email = '" + email + '\'' + 
+			",email = '" + email + '\'' +
+					",_id = '"+id+'\''+
 			"}";
 		}
 }

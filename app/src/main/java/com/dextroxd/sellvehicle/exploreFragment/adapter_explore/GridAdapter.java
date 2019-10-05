@@ -42,12 +42,13 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.MyViewHolder>{
     boolean b = false;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView cost, bedroom, size;
+        public TextView cost, bedroom, size,location;
         public ImageView image_house;
         ImageView like_button;
         public MyViewHolder(View view) {
             super(view);
             cost = view.findViewById(R.id.cost_sell);
+            location=view.findViewById(R.id.locationofsale);
             bedroom = view.findViewById(R.id.bedroom_sell);
             size = view.findViewById(R.id.size_sell);
             like_button = view.findViewById(R.id.likebutton);
@@ -76,6 +77,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.MyViewHolder>{
         myViewHolder.cost.setText(String.valueOf(response.getPrice()));
         myViewHolder.bedroom.setText(String.valueOf(response.getBedroom()));
         myViewHolder.size.setText(String.valueOf(response.getArea()));
+        myViewHolder.location.setText(String.valueOf(response.getLocation()));
         com.dextroxd.sellvehicle.network.RequestofId.Response response1 = new com.dextroxd.sellvehicle.network.RequestofId.Response();
         response1.setId(houseList.get(i).get_id());
 
@@ -90,10 +92,12 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.MyViewHolder>{
                 in.putExtra("Bedroom",String.valueOf(responsesProperty.getBedroom()));
                 in.putExtra("Furnishing",String.valueOf(responsesProperty.isFurnished()));
                 in.putExtra("Type",String.valueOf(responsesProperty.getType()));
+                in.putExtra("Location",String.valueOf(responsesProperty.getLocation()));
                 in.putExtra("Bathroom",String.valueOf(responsesProperty.getBathroom()));
                 in.putExtra("Facing",String.valueOf(responsesProperty.getFacing()));
                 in.putExtra("Area",String.valueOf(responsesProperty.getArea()));
                 in.putStringArrayListExtra("Array",responsesProperty.getImages());
+
                 in.putExtra("Description",String.valueOf(responsesProperty.getDescription()));
                 in.putExtra("Floors",String.valueOf(responsesProperty.getFloors()));
                 in.putExtra("Parking",String.valueOf(responsesProperty.isParking()));
@@ -124,13 +128,13 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.MyViewHolder>{
         mApiInterface.checkFav((preferences.getString("auth_Token","hell")),response12).enqueue(new Callback<com.dextroxd.sellvehicle.network.RequestofId.CheckofFav.Response>() {
             @Override
             public void onResponse(Call<com.dextroxd.sellvehicle.network.RequestofId.CheckofFav.Response> call, retrofit2.Response<com.dextroxd.sellvehicle.network.RequestofId.CheckofFav.Response> response) {
-//                if(response.body().isFav()){
-//                    myViewHolder.like_button.setImageResource(R.drawable.ic_favorite_black_24dp);
-//                }
-//                else {
-//                    myViewHolder.like_button.setImageResource(R.drawable.ic_favorite_border_black_24dp);
-//                }
-                Toast.makeText(context,response.toString(),Toast.LENGTH_SHORT).show();
+                if(response.body().isFav()){
+                    myViewHolder.like_button.setImageResource(R.drawable.ic_favorite_black_24dp);
+                }
+                else {
+                    myViewHolder.like_button.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+                }
+//                Toast.makeText(context,response.toString(),Toast.LENGTH_SHORT).show();
             }
 
             @Override

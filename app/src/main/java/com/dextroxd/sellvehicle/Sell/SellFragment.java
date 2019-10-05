@@ -70,7 +70,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  * A simple {@link Fragment} subclass.
  */
 public class SellFragment extends Fragment {
-    EditText bedroooms,rent,type,bathrooms,area,floors,facing,title,description;
+    EditText bedroooms,rent,type,bathrooms,area,floors,facing,title,description,location;
     private ApiInterface mApiInterface;
     String final_furnishing;
     String  final_rent,final_bedroom;
@@ -108,6 +108,7 @@ public class SellFragment extends Fragment {
         rent=(EditText)view.findViewById(R.id.id_maintenance);
         submit_button=(Button)view.findViewById(R.id.id_submit);
         description = view.findViewById(R.id.id_describe);
+        location=view.findViewById(R.id.id_location);
         type = view.findViewById(R.id.id_type);
         bathrooms = view.findViewById(R.id.id_bathrooms);
         area = view.findViewById(R.id.id_BuiltUp);
@@ -160,15 +161,24 @@ public class SellFragment extends Fragment {
         pickImages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(hasStoragePermission(2))
-                imagesUriArrayList.clear();
-                Intent intent = new Intent(Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                if(hasStoragePermission(2)){
+                    imagesUriArrayList.clear();
+                    Intent intent = new Intent(Intent.ACTION_PICK,
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
 //                intent.setType("image/*");
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), OPEN_DOCUMENT_CODE);
+                    intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(Intent.createChooser(intent, "Select Picture"), OPEN_DOCUMENT_CODE);
+                }
+//                imagesUriArrayList.clear();
+//                Intent intent = new Intent(Intent.ACTION_PICK,
+//                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                intent.addCategory(Intent.CATEGORY_OPENABLE);
+////                intent.setType("image/*");
+//                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+//                intent.setAction(Intent.ACTION_GET_CONTENT);
+//                startActivityForResult(Intent.createChooser(intent, "Select Picture"), OPEN_DOCUMENT_CODE);
             }
         });
         submit_button.setOnClickListener(new View.OnClickListener() {
@@ -207,7 +217,7 @@ public class SellFragment extends Fragment {
                 }
                 mApiInterface.submitProperty(preferences.getString("auth_Token","hell"),title.getText().toString().trim(),description.getText().toString().trim()
                 ,Integer.parseInt(floors.getText().toString().trim()),parking,facing.getText().toString().trim(),ImagesArr,type.getText().toString().trim(),Integer.parseInt(bedroooms.getText().toString().trim()),Integer.parseInt(bathrooms.getText().toString().trim()),furnished,
-                        bachelorsallowed,Integer.parseInt(area.getText().toString().trim()),Integer.parseInt(rent.getText().toString().trim()),2000).enqueue(new Callback<Response_Submit>() {
+                        bachelorsallowed,Integer.parseInt(area.getText().toString().trim()),Integer.parseInt(rent.getText().toString().trim()),2000,location.getText().toString().trim()).enqueue(new Callback<Response_Submit>() {
                     @Override
                     public void onResponse(Call<Response_Submit> call, Response<Response_Submit> response) {
                         if(response.code()==200){

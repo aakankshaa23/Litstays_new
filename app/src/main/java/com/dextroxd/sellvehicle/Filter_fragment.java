@@ -35,7 +35,8 @@ import retrofit2.Callback;
  */
 public class Filter_fragment extends Fragment {
     SeekBar rent_seekbar;
-    TextView text_rent,text_duration,text_distance;
+    TextView text_rent,text_duration,text_distance,location_filter;
+    String location;
     int max=50000;int min=1000;int current=10000;// max , min,current are related to rent_seekbar
     boolean bachelorsAllowed = false;
     int selected_bedroom;
@@ -67,9 +68,11 @@ public class Filter_fragment extends Fragment {
         });
         mApiInterface = ApiUtils.getAPIService();
         text_rent=view.findViewById(R.id.textView);
+
         rent_seekbar=view.findViewById(R.id.seekBar);
         rent_seekbar.setMax(max);
         apply_filter = view.findViewById(R.id.apply_filter_button);
+        location_filter=view.findViewById(R.id.location_filter);
         rent_seekbar.setProgress(current);
         text_rent.setText(""+current);
         rent_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -143,8 +146,10 @@ public class Filter_fragment extends Fragment {
         apply_filter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Response is from package - com.dextroxd.sellvehicle.network.PostOfSearch;
                 Response response = new Response();
                 response.setBedroom(selected_bedroom);
+                response.setLocation(String.valueOf(location_filter));
                 response.setBachelorsAllowed(bachelorsAllowed);
                 response.setMaxPrice(current);
                 response.setFurnishing(selected_furnishing);

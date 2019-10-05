@@ -10,8 +10,8 @@ public class Response{
 	@SerializedName("name")
 	private String name;
 
-	@SerializedName("password2")
-	private String password2;
+	@SerializedName("phone")
+	private String phone;
 
 	@SerializedName("email")
 	private String email;
@@ -24,20 +24,16 @@ public class Response{
 		return password;
 	}
 
+	public String getPhone() { return phone; }
+
+	public void setPhone(String phone) { this.phone = phone; }
+
 	public void setName(String name){
 		this.name = name;
 	}
 
 	public String getName(){
 		return name;
-	}
-
-	public void setPassword2(String password2){
-		this.password2 = password2;
-	}
-
-	public String getPassword2(){
-		return password2;
 	}
 
 	public void setEmail(String email){
@@ -54,7 +50,7 @@ public class Response{
 			"LoginResponse{" +
 			"password = '" + password + '\'' +
 			",name = '" + name + '\'' +
-			",password2 = '" + password2 + '\'' +
+			",phone = '" + phone + '\'' +
 			",email = '" + email + '\'' + 
 			"}";
 		}

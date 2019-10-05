@@ -6,6 +6,7 @@ public class Response{
 	private String name;
 	private boolean bachelorsAllowed;
 	private int maxPrice;
+	private String location;
 	private int buildYear;
 	private int bedroom;
 
@@ -26,6 +27,14 @@ public class Response{
 
 	public int getMaxArea(){
 		return maxArea;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
 	}
 
 	public void setMinPrice(int minPrice){

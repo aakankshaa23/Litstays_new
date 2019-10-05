@@ -13,12 +13,13 @@
         android:layout_height="?attr/actionBarSize"
         android:elevation="20dp"
         android:background="@drawable/toolbar_gradient">
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profile_pic"
             android:layout_width="36dp"
             android:background="@drawable/round_back"
             android:layout_marginLeft="24dp"
             android:layout_height="36dp"
+            android:transitionName="@string/transition_string"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_person_black_60dp" />
         <ImageButton
@@ -168,6 +169,16 @@
                 />
 
         </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:background="@drawable/rounded_button"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:id="@+id/add_change_image"
+        android:padding="16dp"
+        android:text="Add/Change Image"
+        android:layout_height="wrap_content"/>
         <Button
             android:layout_width="wrap_content"
             android:background="@drawable/rounded_button"

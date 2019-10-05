@@ -72,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, response.body() != null ? "Success" : "Failure",Toast.LENGTH_SHORT).show();
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putString("auth_Token",response.body().getAuthToken());
+                    editor.putString("idOfUser",response.body().getId());
                     editor.apply();
                     startActivity(new Intent(LoginActivity.this,MainActivity.class));
                     finish();

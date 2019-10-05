@@ -13,8 +13,18 @@ public class Response{
 	private String facing;
 	private String _id;
 	private int buildYear;
+	private String location;
 	private String type;
 	private int bedroom;
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
 	private int floors;
 	private int furnished;
 	private int price;
