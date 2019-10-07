@@ -179,6 +179,7 @@ public class ExploreFragment extends Fragment implements Animation.AnimationList
             @Override
             public void onResponse(Call<List<Response>> call, retrofit2.Response<List<Response>> response) {
                 List<Response> data = response.body();
+                Toast.makeText(getActivity(),data.toString(),Toast.LENGTH_SHORT).show();
                 responsesProperty = data;
                 gridAdapter = new GridAdapter(context,data);
 //                Log.e("DataofFilter",data.toString());

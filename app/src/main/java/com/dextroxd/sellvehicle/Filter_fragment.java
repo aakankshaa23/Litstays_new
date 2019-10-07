@@ -37,12 +37,12 @@ public class Filter_fragment extends Fragment {
     SeekBar rent_seekbar;
     TextView text_rent,text_duration,text_distance,location_filter;
     String location;
-    int max=50000;int min=1000;int current=25000;// max , min,current are related to rent_seekbar
+    int max=50000;int min=1000;int current=1000;// max , min,current are related to rent_seekbar
     boolean bachelorsAllowed = false;
-    int selected_bedroom;
+    int selected_bedroom = 4;
     private GridAdapter gridAdapter;
     private ApiInterface mApiInterface;
-    int selected_furnishing;
+    int selected_furnishing = 1;
     private RecyclerView recyclerView;
     Button apply_filter;
 
@@ -144,10 +144,13 @@ public class Filter_fragment extends Fragment {
                 //Response is from package - com.dextroxd.sellvehicle.network.PostOfSearch;
                 Response response = new Response();
                 response.setBedroom(selected_bedroom);
-                response.setLocation(String.valueOf(location_filter));
-                response.setBachelorsAllowed(bachelorsAllowed);
-                response.setMaxPrice(current);
-                response.setFurnishing(selected_furnishing);
+                Toast.makeText(getActivity(),response.toString(),Toast.LENGTH_SHORT).show();
+
+//                response.setLocation(String.valueOf(location_filter));
+//                response.setBachelorsAllowed(bachelorsAllowed);
+//                if(current!=1000)
+//                response.setMaxPrice(current);
+//                response.setFurnishing(selected_furnishing);
                 ((ExploreFragment)getParentFragment()).searchProperty(response);
                 getFragmentManager().popBackStackImmediate();
             }

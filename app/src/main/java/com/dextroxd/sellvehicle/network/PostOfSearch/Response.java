@@ -1,14 +1,17 @@
 package com.dextroxd.sellvehicle.network.PostOfSearch;
 
 public class Response{
-	private int maxArea;
+	private int maxArea=1000;
 	private int minPrice;
 	private String name;
-	private boolean bachelorsAllowed;
-	private int maxPrice;
+	private boolean bachelorsAllowed=true;
+	private int maxPrice=50000;
 	private String location;
 	private int buildYear;
-	private int bedroom;
+	private int bedroom=4;
+
+	private int furnishing;
+	private int minArea;
 
 	public void setFurnishing(int furnishing) {
 		this.furnishing = furnishing;
@@ -18,8 +21,6 @@ public class Response{
 		return furnishing;
 	}
 
-	private int furnishing;
-	private int minArea;
 
 	public void setMaxArea(int maxArea){
 		this.maxArea = maxArea;
