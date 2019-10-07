@@ -40,5 +40,4 @@
         android:layout_marginLeft="16dp"
         android:textSize="20dp"
     android:textColor="#84ffff"/>
-
 </LinearLayout>

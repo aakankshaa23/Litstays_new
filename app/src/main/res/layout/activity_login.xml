@@ -88,6 +88,18 @@
                 android:paddingLeft="36dp"
                 android:paddingRight="36dp"
                 android:text="Login" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Forget Password"
+                android:fontFamily="@font/psr"
+                android:textStyle="normal"
+                android:layout_marginTop="24dp"
+                android:textColor="#84ffff"
+                android:textSize="16sp"
+                android:id="@+id/forgetPassword"
+                />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

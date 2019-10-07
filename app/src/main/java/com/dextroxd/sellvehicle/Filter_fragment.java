@@ -37,7 +37,7 @@ public class Filter_fragment extends Fragment {
     SeekBar rent_seekbar;
     TextView text_rent,text_duration,text_distance,location_filter;
     String location;
-    int max=50000;int min=1000;int current=10000;// max , min,current are related to rent_seekbar
+    int max=50000;int min=1000;int current=25000;// max , min,current are related to rent_seekbar
     boolean bachelorsAllowed = false;
     int selected_bedroom;
     private GridAdapter gridAdapter;
@@ -80,12 +80,9 @@ public class Filter_fragment extends Fragment {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 current=progress;
                 text_rent.setText(""+"₹"+current);
-
             }
-
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
             }
 
             @Override
@@ -94,8 +91,6 @@ public class Filter_fragment extends Fragment {
                 toast.show();
             }
         });
-
-
         RadioGroup bachelors = view.findViewById(R.id.radiogroup);
         bachelors.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -159,7 +154,6 @@ public class Filter_fragment extends Fragment {
         });
         return view;
     }
-
-    }
+}
 
 

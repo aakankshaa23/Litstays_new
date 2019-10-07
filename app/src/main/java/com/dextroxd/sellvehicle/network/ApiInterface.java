@@ -82,4 +82,7 @@ public interface ApiInterface
     @POST("createNewPassword")
     Call<com.dextroxd.sellvehicle.network.RequestofId.Message.Response> createNewpassword(@Header("authToken") String authToken, @Body com.dextroxd.sellvehicle.network.PasswordChange.Response response);
 
+    @POST("forgot")
+    Call<Response_Submit>  forgetPassword(@Body com.dextroxd.sellvehicle.network.forgetPassword.Response response);
+
 }

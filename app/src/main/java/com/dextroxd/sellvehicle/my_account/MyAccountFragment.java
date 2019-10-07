@@ -72,6 +72,7 @@ public class MyAccountFragment extends Fragment {
     TextView textView,textView1,textView2,textView3;
     private GoogleSignInClient mGoogleSignInClient;
     SharedPreferences preferences;
+    SharedPreferences.Editor editor;
     private ApiInterface mApiInterface;
     private String imageUrl;
     private GoogleApiClient mGoogleApiClient;
