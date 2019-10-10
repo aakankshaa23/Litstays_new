@@ -24,6 +24,10 @@ import com.dextroxd.sellvehicle.network.ApiInterface;
 import com.dextroxd.sellvehicle.network.ApiUtils;
 import com.dextroxd.sellvehicle.network.PostOfSearch.Response;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -45,6 +49,7 @@ public class Filter_fragment extends Fragment {
     int selected_furnishing = 1;
     private RecyclerView recyclerView;
     Button apply_filter;
+    HashMap<String,Object> hashMap;
 
     public Filter_fragment() {
         // Required empty public constructor
@@ -67,6 +72,7 @@ public class Filter_fragment extends Fragment {
             }
         });
         mApiInterface = ApiUtils.getAPIService();
+        hashMap = new HashMap<>();
         text_rent=view.findViewById(R.id.textView);
 
         rent_seekbar=view.findViewById(R.id.seekBar);
@@ -80,6 +86,8 @@ public class Filter_fragment extends Fragment {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 current=progress;
                 text_rent.setText(""+"₹"+current);
+                    hashMap.put("maxPrice",current);
+
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -97,9 +105,12 @@ public class Filter_fragment extends Fragment {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if(checkedId==R.id.radioFilterY){
                     bachelorsAllowed = true;
+                        hashMap.put("bachelorsAllowed",bachelorsAllowed);
                 }
                 else if(checkedId==R.id.radioFilterN){
                     bachelorsAllowed = false;
+                    hashMap.put("bachelorsAllowed",bachelorsAllowed);
+
                 }
 
             }
@@ -110,16 +121,23 @@ public class Filter_fragment extends Fragment {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if(checkedId==R.id.one){
                     selected_bedroom=1;
+                    hashMap.put("bedroom",selected_bedroom);
 
                 }
                 else if(checkedId==R.id.two){
                     selected_bedroom=2;
+                    hashMap.put("bedroom",selected_bedroom);
+
                 }
                 else if(checkedId==R.id.three){
                     selected_bedroom=3;
+                    hashMap.put("bedroom",selected_bedroom);
+
                 }
                 else{
                     selected_bedroom=4;
+                    hashMap.put("bedroom",selected_bedroom);
+
                 }
             }
         });
@@ -128,13 +146,19 @@ public class Filter_fragment extends Fragment {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if(checkedId==R.id.unfurnished){
-                    selected_furnishing=1;
+                    selected_furnishing=0;
+                    hashMap.put("furnishing",selected_furnishing);
+
                 }
                 else if(checkedId==R.id.semifurnished){
-                    selected_furnishing=2;
+                    selected_furnishing=1;
+                    hashMap.put("furnishing",selected_furnishing);
+
                 }
                 else{
-                    selected_furnishing=3;
+                    selected_furnishing=2;
+                    hashMap.put("furnishing",selected_furnishing);
+
                 }
             }
         });
@@ -142,16 +166,17 @@ public class Filter_fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //Response is from package - com.dextroxd.sellvehicle.network.PostOfSearch;
-                Response response = new Response();
-                response.setBedroom(selected_bedroom);
-                Toast.makeText(getActivity(),response.toString(),Toast.LENGTH_SHORT).show();
+//                Response response = new Response();
+//                response.setBedroom(selected_bedroom);
+//                Toast.makeText(getActivity(),response.toString(),Toast.LENGTH_SHORT).show();
 
 //                response.setLocation(String.valueOf(location_filter));
 //                response.setBachelorsAllowed(bachelorsAllowed);
 //                if(current!=1000)
 //                response.setMaxPrice(current);
 //                response.setFurnishing(selected_furnishing);
-                ((ExploreFragment)getParentFragment()).searchProperty(response);
+                Log.e("selected filter",hashMap.toString());
+                ((ExploreFragment)getParentFragment()).searchProperty(hashMap);
                 getFragmentManager().popBackStackImmediate();
             }
         });

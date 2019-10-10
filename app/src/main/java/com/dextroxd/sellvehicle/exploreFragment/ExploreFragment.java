@@ -30,7 +30,10 @@ import com.dextroxd.sellvehicle.network.PostProperty.model.Response;
 import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -116,7 +119,7 @@ public class ExploreFragment extends Fragment implements Animation.AnimationList
         mApiInterface.getProperty().enqueue(new Callback<List<Response>>() {
             @Override
             public void onResponse(Call<List<Response>> call, retrofit2.Response<List<Response>> response) {
-                Log.e("Hell",response.body().toString());
+                Log.e("Hell",String.valueOf(response.body().size()));
                 List<Response> data = response.body();
                 responsesProperty = data;
                 gridAdapter = new GridAdapter(context,data);
@@ -139,9 +142,12 @@ public class ExploreFragment extends Fragment implements Animation.AnimationList
                     Toast.makeText(getActivity(),"Please enter the name of property",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                com.dextroxd.sellvehicle.network.PostOfSearch.Response response = new com.dextroxd.sellvehicle.network.PostOfSearch.Response();
-                response.setName(editText.getText().toString().trim());
-                searchProperty(response);
+//                com.dextroxd.sellvehicle.network.PostOfSearch.Response response = new com.dextroxd.sellvehicle.network.PostOfSearch.Response();
+//                response.setName(editText.getText().toString().trim());
+//                searchProperty(response);
+                HashMap<String,Object> hashMap = new HashMap<>();
+                hashMap.put("name",editText.getText().toString().trim());
+                searchProperty(hashMap);
             }
         });
         filter_button=(ImageButton)view.findViewById(R.id.filter_button);
@@ -174,12 +180,14 @@ public class ExploreFragment extends Fragment implements Animation.AnimationList
     public void onAnimationRepeat(Animation animation) {
 
     }
-    public void searchProperty(com.dextroxd.sellvehicle.network.PostOfSearch.Response response){
+    public void searchProperty(HashMap<String,Object> response){
+//        String body = response.toString();
         mApiInterface.searchProperty(response).enqueue(new Callback<List<Response>>() {
             @Override
             public void onResponse(Call<List<Response>> call, retrofit2.Response<List<Response>> response) {
                 List<Response> data = response.body();
-                Toast.makeText(getActivity(),data.toString(),Toast.LENGTH_SHORT).show();
+                Log.e("whatyougot",String.valueOf(data.size()));
+//                Toast.makeText(getActivity(),data.toString(),Toast.LENGTH_SHORT).show();
                 responsesProperty = data;
                 gridAdapter = new GridAdapter(context,data);
 //                Log.e("DataofFilter",data.toString());

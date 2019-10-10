@@ -7,6 +7,9 @@ import com.dextroxd.sellvehicle.network.Login.model.LoginResponse;
 import com.dextroxd.sellvehicle.network.Login.model.Response;
 import com.dextroxd.sellvehicle.network.PostProperty.model.Response_Submit;
 
+import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.List;
 
 import okhttp3.MultipartBody;
@@ -45,7 +48,7 @@ public interface ApiInterface
 
     @POST("property/search")
     Call<List<com.dextroxd.sellvehicle.network.PostProperty.model.Response>> searchProperty(
-            @Body com.dextroxd.sellvehicle.network.PostOfSearch.Response response );
+            @Body HashMap<String,Object> body );
 
     @POST("property/addFav")
     Call<com.dextroxd.sellvehicle.network.RequestofId.Message.Response> addfav(@Header("authToken") String authToken, @Body com.dextroxd.sellvehicle.network.RequestofId.Response response);
