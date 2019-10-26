@@ -83,10 +83,6 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
 
 
                 <android.support.design.widget.TextInputLayout
@@ -95,41 +91,15 @@
                     android:layout_marginTop="16dp"
                     android:focusableInTouchMode="true"
                     app:hintEnabled="false"
-                    android:layout_marginBottom="8dp">
-
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/input_phone"
-                        android:layout_marginTop="15dp"
-                        android:focusableInTouchMode="true"
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:fontFamily="@font/psr"
-                        android:background="@drawable/white_round"
-                        android:drawableRight="@drawable/ic_phone_black_24dp"
-                        android:hint="Phone No"
-                        android:paddingLeft="20dp"
-                        android:paddingRight="20dp"
-                        android:inputType="phone"/>
-
-                </android.support.design.widget.TextInputLayout>
-            </LinearLayout>
-
-
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:focusableInTouchMode="true"
-                    app:hintEnabled="false"
-                    android:layout_marginBottom="8dp">
+                    >
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/input_password"
                         android:layout_width="match_parent"
-                        android:layout_marginTop="15dp"
                         android:focusableInTouchMode="true"
                         android:layout_height="48dp"
+
+
                         android:hint="Password"
                         android:fontFamily="@font/psr"
                         android:background="@drawable/white_round"
@@ -152,6 +122,16 @@
                 android:paddingLeft="36dp"
                 android:paddingRight="36dp"
                 android:text="Sign Up" />
+            <ProgressBar
+                android:id="@+id/progressBar_signup"
+                android:visibility="gone"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="#84ffff"
+                />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

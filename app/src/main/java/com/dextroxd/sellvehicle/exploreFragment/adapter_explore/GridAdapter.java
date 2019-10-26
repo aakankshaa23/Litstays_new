@@ -42,12 +42,13 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.MyViewHolder>{
     boolean b = false;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView cost, bedroom, size,location;
+        public TextView cost, bedroom, size,location,furnishing;
         public ImageView image_house;
         ImageView like_button;
         public MyViewHolder(View view) {
             super(view);
             cost = view.findViewById(R.id.cost_sell);
+            furnishing=view.findViewById(R.id.furnishing);
             location=view.findViewById(R.id.locationofsale);
             bedroom = view.findViewById(R.id.bedroom_sell);
             size = view.findViewById(R.id.size_sell);
@@ -74,9 +75,17 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.MyViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, final int i) {
         final Response response = houseList.get(i);
-        myViewHolder.cost.setText(String.valueOf(response.getPrice()));
-        myViewHolder.bedroom.setText(String.valueOf(response.getBedroom()));
-        myViewHolder.size.setText(String.valueOf(response.getArea()));
+        String furnishing;
+        if(response.getFurnished()==0)
+            furnishing="NOT FURNISHED";
+                    else if(response.getFurnished()==1)
+                        furnishing="SEMI-FURNISHED";
+                    else
+                        furnishing="FULLY_FURNISHED";
+        myViewHolder.cost.setText("RENT- ₹"+String.valueOf(response.getPrice()));
+        myViewHolder.bedroom.setText("BEDROOMS- "+String.valueOf(response.getBedroom()));
+        myViewHolder.furnishing.setText("FURNISHING- "+furnishing);
+        myViewHolder.size.setText("AREA- "+String.valueOf(response.getArea()));
         myViewHolder.location.setText(String.valueOf(response.getLocation()));
         com.dextroxd.sellvehicle.network.RequestofId.Response response1 = new com.dextroxd.sellvehicle.network.RequestofId.Response();
         response1.setId(houseList.get(i).get_id());
@@ -90,6 +99,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.MyViewHolder>{
                 Intent in=new Intent(context, cardActivity.class);
                 in.putExtra("Cost",String.valueOf(responsesProperty.getPrice()));
                 in.putExtra("Bedroom",String.valueOf(responsesProperty.getBedroom()));
+                in.putExtra("id",String.valueOf(responsesProperty.getListedBy()));
                 in.putExtra("Furnishing",String.valueOf(responsesProperty.isFurnished()));
                 in.putExtra("Type",String.valueOf(responsesProperty.getType()));
                 in.putExtra("Location",String.valueOf(responsesProperty.getLocation()));

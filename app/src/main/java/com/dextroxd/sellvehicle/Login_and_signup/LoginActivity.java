@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,12 +34,14 @@ public class LoginActivity extends AppCompatActivity {
     TextView link_signup;
     private ApiInterface mApiInterface;
     SharedPreferences.Editor editor;
+    ProgressBar progress;
     private SharedPreferences preferences;
     TextView textView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        progress=findViewById(R.id.progressBar_login);
         preferences = getApplicationContext().getSharedPreferences("Litstays",0);
         TextView link_signup = findViewById(R.id.link_signup);
         mApiInterface = ApiUtils.getAPIService();
@@ -69,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                 button.setOnClickListener(new View.OnClickListener() {
                                               @Override
                                               public void onClick(View v) {
+                                                  //progress.setVisibility(View.VISIBLE);
                                                   if(TextUtils.isEmpty(editText.getText().toString().trim())){
                                                       Toast.makeText(LoginActivity.this,"Please enter your email id.",Toast.LENGTH_SHORT).show();
                                                       return;
@@ -79,7 +83,9 @@ public class LoginActivity extends AppCompatActivity {
                                                       @Override
                                                       public void onResponse(Call<Response_Submit> call, Response<Response_Submit> response) {
                                                           if(response.body().getMsg().equals("success")){
+                                                              progress.setVisibility(View.VISIBLE);
                                                               Toast.makeText(LoginActivity.this,"A password reset link has been sent to your email",Toast.LENGTH_SHORT).show();
+                                                              progress.setVisibility(View.GONE);
                                                           }
                                                           else {
                                                               Toast.makeText(LoginActivity.this,"Please check your email and try again",Toast.LENGTH_SHORT).show();
@@ -126,12 +132,14 @@ public class LoginActivity extends AppCompatActivity {
         loginPost.setEmail(email);
         loginPost.setPassword(password);
         editor.putString("email",email);
+        //progress.setVisibility(View.VISIBLE);
         editor.apply();
         editor.commit();
         mApiInterface.loginUser(loginPost).enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(@NonNull Call<LoginResponse> call, @NonNull Response<LoginResponse> response) {
                 if(response.code()==200){
+                    progress.setVisibility(View.VISIBLE);
                     Toast.makeText(LoginActivity.this, response.body() != null ? "Success" : "Failure",Toast.LENGTH_SHORT).show();
                     editor.putString("auth_Token",response.body().getAuthToken());
                     editor.putString("idOfUser",response.body().getId());
@@ -139,10 +147,14 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(new Intent(LoginActivity.this,MainActivity.class));
                     finish();
                 }
+                else{
+                    Toast.makeText(LoginActivity.this,"Please enter Correct Email and Password",Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
+                Toast.makeText(LoginActivity.this,t.toString(),Toast.LENGTH_SHORT).show();
 
             }
         });

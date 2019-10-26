@@ -68,6 +68,15 @@
                     android:id="@+id/size_sell"
                     android:textSize="16sp"
                     android:layout_marginTop="4dp"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:maxLines="1"
+                    android:fontFamily="@font/psr"
+                    android:id="@+id/furnishing"
+                    android:textSize="16sp"
+                    android:layout_marginTop="4dp"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

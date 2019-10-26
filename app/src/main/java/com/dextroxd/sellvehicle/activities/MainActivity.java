@@ -1,12 +1,17 @@
 package com.dextroxd.sellvehicle.activities;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -51,13 +56,50 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        SharedPreferences preferences = getApplicationContext().getSharedPreferences("Litstays",0);
-        Toast.makeText(MainActivity.this,preferences.getString("auth_Token","hell"),Toast.LENGTH_SHORT).show();
-        Log.i("authTpken",preferences.getString("auth_Token","hell"));
-        bottomNavigationView = findViewById(R.id.nav_bar);
-        bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
-        getSupportFragmentManager().beginTransaction().replace(R.id.container,new ExploreFragment()).commit();
+        if(!isConnected(MainActivity.this)) buildDialog(MainActivity.this).show();
+        else {
+            Toast.makeText(MainActivity.this, "Welcome", Toast.LENGTH_SHORT).show();
+            setContentView(R.layout.activity_main);
+
+            SharedPreferences preferences = getApplicationContext().getSharedPreferences("Litstays", 0);
+            Toast.makeText(MainActivity.this, preferences.getString("auth_Token", "hell"), Toast.LENGTH_SHORT).show();
+            Log.i("authTpken", preferences.getString("auth_Token", "hell"));
+            bottomNavigationView = findViewById(R.id.nav_bar);
+            bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, new ExploreFragment()).commit();
+        }
+    }
+
+    public boolean isConnected(Context context) {
+
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netinfo = cm.getActiveNetworkInfo();
+
+        if( netinfo != null && netinfo.isConnectedOrConnecting()) {
+            android.net.NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            android.net.NetworkInfo mobile = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+            if((mobile != null && mobile.isConnectedOrConnecting()) || (wifi != null && wifi.isConnectedOrConnecting())) return true;
+        else return false;
+        } else
+        return false;
+    }
+    public AlertDialog.Builder buildDialog(Context c) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(c);
+        builder.setTitle("No Internet Connection");
+        builder.setMessage("You need to have Mobile Data or wifi to access this. Press ok to Exit");
+
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                finish();
+            }
+        });
+
+        return builder;
     }
 
     @Override

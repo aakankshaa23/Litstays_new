@@ -1,6 +1,7 @@
 package com.dextroxd.sellvehicle.activities;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import com.dextroxd.sellvehicle.R;
 import com.dextroxd.sellvehicle.network.ApiInterface;
 import com.dextroxd.sellvehicle.network.ApiUtils;
 import com.dextroxd.sellvehicle.network.ModelSubmitforChangeofDetails.Response;
+import com.facebook.login.Login;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,7 +51,7 @@ public class viewEditProfile extends AppCompatActivity {
         preferences =getApplicationContext().getSharedPreferences("Litstays",0);
         TextView textView = findViewById(R.id.change_name);
         TextView textView1 = findViewById(R.id.change_password);
-        TextView textView2= findViewById(R.id.change_phone);
+//        TextView textView2= findViewById(R.id.change_phone);
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,12 +64,7 @@ public class viewEditProfile extends AppCompatActivity {
                 dialogBoxPassword();
             }
         });
-        textView2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogBoxPhone();
-            }
-        });
+
     }
     public void dialogBoxName(){
         final Dialog dialog = new Dialog(viewEditProfile.this);
@@ -128,6 +125,8 @@ public class viewEditProfile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+
+
                 if(editText.getText().toString().trim().isEmpty()){
                     Toast.makeText(viewEditProfile.this,"Please enter new phone",Toast.LENGTH_SHORT).show();
                     return;
@@ -176,12 +175,20 @@ public class viewEditProfile extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent in=new Intent();
+                String password=in.getStringExtra("password");
+
 
                 if(editText.getText().toString().trim().isEmpty()){
-                    Toast.makeText(viewEditProfile.this,"Please enter new phone",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(viewEditProfile.this,"Please enter new password",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                updatePassword(editText.getText().toString().trim());
+                else if(editText.getText().toString().trim()!=password){
+                    Toast.makeText(viewEditProfile.this,"Please enter correct old password",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    updatePassword(editText.getText().toString().trim());
+                }
                 dialog.dismiss();
             }
         });

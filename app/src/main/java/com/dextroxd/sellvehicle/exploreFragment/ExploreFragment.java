@@ -2,10 +2,14 @@ package com.dextroxd.sellvehicle.exploreFragment;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,6 +24,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.dextroxd.sellvehicle.RecyclerItemClickListener;
+import com.dextroxd.sellvehicle.activities.MainActivity;
 import com.dextroxd.sellvehicle.cardActivity.cardActivity;
 import com.dextroxd.sellvehicle.exploreFragment.adapter_explore.GridAdapter;
 import com.dextroxd.sellvehicle.R;
@@ -83,15 +88,17 @@ public class ExploreFragment extends Fragment implements Animation.AnimationList
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if(!isConnected(getContext()))buildDialog(getContext()).show();
 
-         final  View view = inflater.inflate(R.layout.fragment_explore, container, false);
-        context = view.getContext();
-        animFadein = AnimationUtils.loadAnimation(context,
-                R.anim.fade_in);
-        mApiInterface = ApiUtils.getAPIService();
-        responsesProperty =  new ArrayList<>();
-        editText = view.findViewById(R.id.name_edit_text);
-        recyclerView = view.findViewById(R.id.id_recycler_explore);
+
+            final View view = inflater.inflate(R.layout.fragment_explore, container, false);
+            context = view.getContext();
+            animFadein = AnimationUtils.loadAnimation(context,
+                    R.anim.fade_in);
+            mApiInterface = ApiUtils.getAPIService();
+            responsesProperty = new ArrayList<>();
+            editText = view.findViewById(R.id.name_edit_text);
+            recyclerView = view.findViewById(R.id.id_recycler_explore);
 //        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(View view, int position) {
@@ -112,59 +119,92 @@ public class ExploreFragment extends Fragment implements Animation.AnimationList
 //                startActivity(in);
 //            }
 //        }));
-        button = view.findViewById(R.id.search_name);
-        view.startAnimation(animFadein);
-        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        mApiInterface.getProperty().enqueue(new Callback<List<Response>>() {
-            @Override
-            public void onResponse(Call<List<Response>> call, retrofit2.Response<List<Response>> response) {
-                Log.e("Hell",String.valueOf(response.body().size()));
-                List<Response> data = response.body();
-                responsesProperty = data;
-                gridAdapter = new GridAdapter(context,data);
-                recyclerView.setAdapter(gridAdapter);
-                gridAdapter.notifyDataSetChanged();
-               // Toast.makeText(getActivity(), "Checking "+response.body().toString(), Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onFailure(Call<List<Response>> call, Throwable t) {
-                Log.d(TAG, "onFailure: "+t.getMessage());
-                Toast.makeText(getActivity(), "Failure - "+t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-        button.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View v) {
-                if(editText.getText().toString().trim().isEmpty()){
-                    Toast.makeText(getActivity(),"Please enter the name of property",Toast.LENGTH_SHORT).show();
-                    return;
+            button = view.findViewById(R.id.search_name);
+            view.startAnimation(animFadein);
+            final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+            recyclerView.setLayoutManager(linearLayoutManager);
+            mApiInterface.getProperty().enqueue(new Callback<List<Response>>() {
+                @Override
+                public void onResponse(Call<List<Response>> call, retrofit2.Response<List<Response>> response) {
+                    Log.e("Hell", String.valueOf(response.body().size()));
+                    List<Response> data = response.body();
+                    responsesProperty = data;
+                    gridAdapter = new GridAdapter(context, data);
+                    recyclerView.setAdapter(gridAdapter);
+                    gridAdapter.notifyDataSetChanged();
+                    // Toast.makeText(getActivity(), "Checking "+response.body().toString(), Toast.LENGTH_LONG).show();
                 }
+
+                @Override
+                public void onFailure(Call<List<Response>> call, Throwable t) {
+                    Log.d(TAG, "onFailure: " + t.getMessage());
+                    Toast.makeText(getActivity(), "Failure - " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+            button.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    if (editText.getText().toString().trim().isEmpty()) {
+                        Toast.makeText(getActivity(), "Please enter the name of property", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 //                com.dextroxd.sellvehicle.network.PostOfSearch.Response response = new com.dextroxd.sellvehicle.network.PostOfSearch.Response();
 //                response.setName(editText.getText().toString().trim());
 //                searchProperty(response);
-                HashMap<String,Object> hashMap = new HashMap<>();
-                hashMap.put("name",editText.getText().toString().trim());
-                searchProperty(hashMap);
-            }
-        });
-        filter_button=(ImageButton)view.findViewById(R.id.filter_button);
-        filter_button.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                    HashMap<String, Object> hashMap = new HashMap<>();
+                    hashMap.put("name", editText.getText().toString().trim());
+                    searchProperty(hashMap);
+                }
+            });
+            filter_button = (ImageButton) view.findViewById(R.id.filter_button);
+            filter_button.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
 //                startActivity(new Intent(context, filterActivity.class));
-                getChildFragmentManager().beginTransaction().replace(R.id.frame_explore,new Filter_fragment()).addToBackStack(null).commit();
+                    getChildFragmentManager().beginTransaction().replace(R.id.frame_explore, new Filter_fragment()).addToBackStack(null).commit();
+
+                }
+            });
+
+
+
+            skeletonScreen = Skeleton.bind(recyclerView).adapter(gridAdapter).shimmer(true).count(10).load(R.layout.skeleton_view).show();
+            return view;
+
+    }
+    public boolean isConnected(Context context) {
+
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netinfo = cm.getActiveNetworkInfo();
+
+        if( netinfo != null && netinfo.isConnectedOrConnecting()) {
+            android.net.NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            android.net.NetworkInfo mobile = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+            if((mobile != null && mobile.isConnectedOrConnecting()) || (wifi != null && wifi.isConnectedOrConnecting())) return true;
+            else return false;
+        } else
+            return false;
+    }
+    public AlertDialog.Builder buildDialog(Context c) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(c);
+        builder.setTitle("No Internet Connection");
+        builder.setMessage("You need to have Mobile Data or wifi to access this. Press ok to Exit");
+
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
 
             }
         });
 
-
-
-        skeletonScreen = Skeleton.bind(recyclerView).adapter(gridAdapter).shimmer(true).count(10).load(R.layout.skeleton_view).show();
-       return view;
+        return builder;
     }
+
 
     @Override
     public void onAnimationStart(Animation animation) {

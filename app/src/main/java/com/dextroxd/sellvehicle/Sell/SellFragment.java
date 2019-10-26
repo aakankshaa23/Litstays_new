@@ -4,6 +4,7 @@ package com.dextroxd.sellvehicle.Sell;
 import android.Manifest;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -12,6 +13,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.icu.text.UnicodeSetSpanner;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,6 +24,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -93,6 +97,7 @@ public class SellFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if(!isConnected(getContext()))buildDialog(getContext()).show();
          View view = inflater.inflate(R.layout.fragment_sell, container, false);
         animFadein = AnimationUtils.loadAnimation(view.getContext(),
                 R.anim.fade_in);
@@ -184,13 +189,14 @@ public class SellFragment extends Fragment {
         submit_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkEdittexts();
-                MultipartBody.Part[] ImagesArr = new MultipartBody.Part[5];
+                int flag = checkEdittexts();
+                if (flag == 0) {
+                    MultipartBody.Part[] ImagesArr = new MultipartBody.Part[5];
 
-                for (int index = 0; index < imagesUriArrayList.size(); index++) {
+                    for (int index = 0; index < imagesUriArrayList.size(); index++) {
 //                    Log.d(TAG, "requestUploadSurvey: survey image " + index + "  " + surveyModel.getPicturesList().get(index).getImagePath());
 //                    File file = new File(getPath(getActivity(),imagesUriArrayList.get(index)));
-                    File file = new File(getImagePathFromUri(imagesUriArrayList.get(index)));
+                        File file = new File(getImagePathFromUri(imagesUriArrayList.get(index)));
 
 //                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
 //                        Uri uri = imagesUriArrayList.get(index);
@@ -212,29 +218,28 @@ public class SellFragment extends Fragment {
 //                        e.printStackTrace();
 //                        Toast.makeText(getActivity(),e.getMessage(), Toast.LENGTH_SHORT).show();
 //                    }
-                    RequestBody surveyBody = RequestBody.create(MediaType.parse("image/*"), file);
-                    ImagesArr[index] = MultipartBody.Part.createFormData("image", file.getName(), surveyBody);
+                        RequestBody surveyBody = RequestBody.create(MediaType.parse("image/*"), file);
+                        ImagesArr[index] = MultipartBody.Part.createFormData("image", file.getName(), surveyBody);
+                    }
+                    mApiInterface.submitProperty(preferences.getString("auth_Token", "hell"), title.getText().toString().trim(), description.getText().toString().trim()
+                            , Integer.parseInt(floors.getText().toString().trim()), parking, facing.getText().toString().trim(), ImagesArr, type.getText().toString().trim(), Integer.parseInt(bedroooms.getText().toString().trim()), Integer.parseInt(bathrooms.getText().toString().trim()), furnished,
+                            bachelorsallowed, Integer.parseInt(area.getText().toString().trim()), Integer.parseInt(rent.getText().toString().trim()), 2000, location.getText().toString().trim()).enqueue(new Callback<Response_Submit>() {
+                        @Override
+                        public void onResponse(Call<Response_Submit> call, Response<Response_Submit> response) {
+                            if (response.code() == 200) {
+                                Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getActivity(), response.message(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Response_Submit> call, Throwable t) {
+                            Toast.makeText(getActivity(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
                 }
-                mApiInterface.submitProperty(preferences.getString("auth_Token","hell"),title.getText().toString().trim(),description.getText().toString().trim()
-                ,Integer.parseInt(floors.getText().toString().trim()),parking,facing.getText().toString().trim(),ImagesArr,type.getText().toString().trim(),Integer.parseInt(bedroooms.getText().toString().trim()),Integer.parseInt(bathrooms.getText().toString().trim()),furnished,
-                        bachelorsallowed,Integer.parseInt(area.getText().toString().trim()),Integer.parseInt(rent.getText().toString().trim()),2000,location.getText().toString().trim()).enqueue(new Callback<Response_Submit>() {
-                    @Override
-                    public void onResponse(Call<Response_Submit> call, Response<Response_Submit> response) {
-                        if(response.code()==200){
-                            Toast.makeText(getActivity(),"Success",Toast.LENGTH_SHORT).show();
-                        }
-                        else
-                        {
-                            Toast.makeText(getActivity(),response.message(),Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Response_Submit> call, Throwable t) {
-                        Toast.makeText(getActivity(),t.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
-
-                    }
-                });
             }
         });
 
@@ -262,13 +267,48 @@ public class SellFragment extends Fragment {
 
 
     }
-    private void checkEdittexts(){
+    private int checkEdittexts(){
         if(TextUtils.isEmpty(bedroooms.getText().toString().trim())||rent.getText().toString().trim().isEmpty()||type.getText().toString().trim().isEmpty()||bathrooms.getText().toString().trim().isEmpty()||area.getText().toString().trim().isEmpty()||floors.getText().toString().trim().isEmpty()||facing.getText().toString().trim().isEmpty()||title.getText().toString().trim().isEmpty()||description.getText().toString().trim().isEmpty()){
-            Toast.makeText(getActivity(),"Please fill all the fields",Toast.LENGTH_SHORT).show();
-            return;
+
+                Toast.makeText(getActivity(), "Please fill all the fields", Toast.LENGTH_SHORT).show();
+                return 1;
+
         }
+        return 0;
 
     }
+    public boolean isConnected(Context context) {
+
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netinfo = cm.getActiveNetworkInfo();
+
+        if( netinfo != null && netinfo.isConnectedOrConnecting()) {
+            android.net.NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            android.net.NetworkInfo mobile = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+            if((mobile != null && mobile.isConnectedOrConnecting()) || (wifi != null && wifi.isConnectedOrConnecting())) return true;
+            else return false;
+        } else
+            return false;
+    }
+    public AlertDialog.Builder buildDialog(Context c) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(c);
+        builder.setTitle("No Internet Connection");
+        builder.setMessage("You need to have Mobile Data or wifi to access this. Press ok to Exit");
+
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+
+            }
+        });
+
+        return builder;
+    }
+
     public static String getPath( Context context, Uri uri ) {
         String result = null;
         String[] proj = { MediaStore.Images.Media.DATA };

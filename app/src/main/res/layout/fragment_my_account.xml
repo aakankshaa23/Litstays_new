@@ -76,37 +76,7 @@
                 android:text="abc@xyz.com"/>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:paddingBottom="10dp"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_phone_black_24dp"
-                android:layout_marginLeft="30dp"
-                android:tint="#84FFFF"
-                android:layout_marginTop="15dp"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1234567890"
-                android:layout_marginTop="15dp"
-                android:textSize="20dp"
-                android:fontFamily="@font/psr"
-                android:id="@+id/profile_number"
-                android:paddingBottom="10dp"
-                android:textColor="#84FFFF"
-                android:layout_marginLeft="40dp"/>
-        </LinearLayout>
-
-        <LinearLayout
+    <LinearLayout
             android:layout_width="match_parent"
             android:layout_marginTop="16dp"
             android:layout_marginLeft="16dp"

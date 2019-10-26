@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +45,7 @@ public class SignUpActivity extends AppCompatActivity {
     EditText city_text;
     EditText email_text;
     ImageView fb_button;
+    ProgressBar progress;
     ImageView google_button;
     private ApiInterface mApiInterface;
     GoogleSignInClient googleSignInClient;
@@ -55,6 +57,7 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+        progress=findViewById(R.id.progressBar_signup);
         preferences = getApplicationContext().getSharedPreferences("Litstays",0);
         if(!TextUtils.equals(preferences.getString("auth_Token","hell"),"hell")){
             startActivity(new Intent(SignUpActivity.this,MainActivity.class));
@@ -120,52 +123,56 @@ public class SignUpActivity extends AppCompatActivity {
 
         EditText name_text=findViewById(R.id.input_name);
         EditText password_text=findViewById(R.id.input_password);
-        EditText phone_text=findViewById(R.id.input_phone);
+        //EditText phone_text=findViewById(R.id.input_phone);
         EditText email_text=findViewById(R.id.input_email);
 
 
         String nameattr=name_text.getText().toString();
         String emailattr=email_text.getText().toString();
-        String phoneattr=phone_text.getText().toString();
+       // String phoneattr=phone_text.getText().toString();
         String passatr=password_text.getText().toString();
 
-        if(nameattr.matches("") || emailattr.matches("")|| phoneattr.matches("")||passatr.matches(""))
+        if(nameattr.matches("") || emailattr.matches("")||passatr.matches(""))
         {
             Toast toast=Toast.makeText(SignUpActivity.this,"Please Enter Details",Toast.LENGTH_SHORT);
             toast.show();
         }
         else
         {
-            onSignUp(nameattr,emailattr,passatr,phoneattr);
+            onSignUp(nameattr,emailattr,passatr);
         }
 
 
     }
 
-    public void onSignUp(String name, String email, String password,String phone)
+    public void onSignUp(String name, String email, String password)
     {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("Name",name);
         editor.putString("Email",email);
-        editor.putString("Phone",phone);
+        //editor.putString("Phone",phone);
         editor.apply();
         editor.commit();
         Response response = new Response();
         response.setName(name);
         response.setEmail(email);
         response.setPassword(password);
-        response.setPhone(phone);
+        //response.setPhone(phone);
         mApiInterface.saveUser(response).enqueue(new Callback<Response>() {
 
             @Override
             public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
+                progress.setVisibility(View.VISIBLE);
                 if(response.code()==200)
                 {
+
                     Toast.makeText(SignUpActivity.this,"Success",Toast.LENGTH_SHORT).show();
+
                     startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
                     finish();
                 }
                 else {
+                    progress.setVisibility(View.GONE);
                     Toast.makeText(SignUpActivity.this,"Please try again",Toast.LENGTH_SHORT).show();
                 }
 

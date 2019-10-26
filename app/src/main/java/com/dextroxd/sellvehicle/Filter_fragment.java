@@ -1,6 +1,7 @@
 package com.dextroxd.sellvehicle;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -68,7 +69,7 @@ public class Filter_fragment extends Fragment {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getChildFragmentManager().popBackStack();
+                getFragmentManager().popBackStack();
             }
         });
         mApiInterface = ApiUtils.getAPIService();

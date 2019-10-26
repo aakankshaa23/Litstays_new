@@ -38,6 +38,7 @@ public interface ApiInterface
     @POST("user/login")
     Call<LoginResponse> loginUser(
             @Body LoginPost loginPost
+
     );
 
     @GET("property/get")

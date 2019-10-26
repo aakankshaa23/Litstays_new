@@ -15,6 +15,8 @@ import com.dextroxd.sellvehicle.exploreFragment.adapter_explore.GridAdapter;
 import com.dextroxd.sellvehicle.network.ApiInterface;
 import com.dextroxd.sellvehicle.network.ApiUtils;
 import com.dextroxd.sellvehicle.network.PostProperty.model.Response;
+import com.ethanhua.skeleton.Skeleton;
+import com.ethanhua.skeleton.SkeletonScreen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,7 @@ public class favoritesFragment extends Fragment {
     private ApiInterface mApiInterface;
     SharedPreferences preferences;
     List<Response> responses;
+    private SkeletonScreen skeletonScreen;
     FavouriteAdapter favouriteAdapter;
 
     public favoritesFragment() {
@@ -65,6 +68,7 @@ public class favoritesFragment extends Fragment {
 
             }
         });
+        skeletonScreen = Skeleton.bind(recyclerView).adapter(favouriteAdapter).shimmer(true).count(10).load(R.layout.skeleton_view).show();
       return view;
     }
 

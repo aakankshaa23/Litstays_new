@@ -68,6 +68,7 @@ public class MyAccountFragment extends Fragment {
     ImageButton viewProfile;
     ImageView imageView;
     Button logout,addimage;
+    String password;
     InputStream imageStream;
     TextView textView,textView1,textView2,textView3;
     private GoogleSignInClient mGoogleSignInClient;
@@ -123,7 +124,7 @@ public class MyAccountFragment extends Fragment {
 //        textView.setText(preferences.getString("Name","Name"));
         textView1 = view.findViewById(R.id.profile_email);
 //        textView1.setText(preferences.getString("Email","abc@gmail.com"));
-        textView2 = view.findViewById(R.id.profile_number);
+//        textView2 = view.findViewById(R.id.profile_number);
 //        textView2.setText(preferences.getString("Phone","1234567890"));
         mApiInterface.getDetails(preferences.getString("idOfUser","hell")).enqueue(new Callback<Response>() {
             @Override
@@ -132,7 +133,8 @@ public class MyAccountFragment extends Fragment {
                 Toast.makeText(getActivity(),response.toString(),Toast.LENGTH_SHORT).show();
                 textView.setText(response.body().getName());
                 textView1.setText(response.body().getEmail());
-                textView2.setText(String.valueOf(response.body().getPhone()));
+                password=response.body().getPassword();
+///                textView2.setText(String.valueOf(response.body().getPhone()));
                 if(response.body().getProfilePic()!=null){
                     Picasso.get().load("http://13.235.43.83:8000/uploads/"+response.body().getProfilePic()).centerCrop().fit().into(imageView);
                     imageUrl = "http://13.235.43.83:8000/uploads/"+response.body().getProfilePic();
@@ -149,6 +151,7 @@ public class MyAccountFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent in=new Intent(view.getContext(), viewEditProfile.class);
+                in.putExtra("password",password);
                 startActivity(in);
             }
         });

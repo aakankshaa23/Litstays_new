@@ -15,6 +15,9 @@ import com.dextroxd.sellvehicle.R;
 import com.dextroxd.sellvehicle.network.ApiInterface;
 import com.dextroxd.sellvehicle.network.ApiUtils;
 import com.dextroxd.sellvehicle.network.PostProperty.model.Response;
+import com.ethanhua.skeleton.Skeleton;
+import com.ethanhua.skeleton.SkeletonScreen;
+
 import java.util.ArrayList;
 import java.util.List;
 import retrofit2.Call;
@@ -26,6 +29,7 @@ public class My_Published_ads_fragment extends Fragment{
     SharedPreferences preferences;
     List<Response> responses;
     private RecyclerForMyAds recyclerForMyAds;
+    private SkeletonScreen skeletonScreen;
     public My_Published_ads_fragment() {
         // Required empty public constructor
     }
@@ -41,7 +45,6 @@ public class My_Published_ads_fragment extends Fragment{
         preferences = getActivity().getApplicationContext().getSharedPreferences("Litstays",0);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
-
         mApiInterface.getMyProperty(preferences.getString("auth_Token","hell")).enqueue(new Callback<List<Response>>() {
             @Override
             public void onResponse(Call<List<Response>> call, retrofit2.Response<List<Response>> response) {
@@ -61,6 +64,7 @@ public class My_Published_ads_fragment extends Fragment{
             }
         });
         enableSwipeToDeleteAndUndo();
+        skeletonScreen = Skeleton.bind(recyclerView).adapter(recyclerForMyAds).shimmer(true).count(10).load(R.layout.skeleton_view).show();
         return view;
     }
 

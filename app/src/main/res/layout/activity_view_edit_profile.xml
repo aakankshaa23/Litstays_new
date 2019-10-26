@@ -30,14 +30,4 @@
         android:fontFamily="@font/psr"
         android:layout_marginLeft="16dp"
         android:textColor="#84ffff" />
-    <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Change Phone Number"
-        android:fontFamily="@font/psr"
-        android:id="@+id/change_phone"
-    android:layout_marginTop="30dp"
-        android:layout_marginLeft="16dp"
-        android:textSize="20dp"
-    android:textColor="#84ffff"/>
 </LinearLayout>
