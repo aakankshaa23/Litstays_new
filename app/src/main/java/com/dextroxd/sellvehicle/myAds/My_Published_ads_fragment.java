@@ -52,7 +52,7 @@ public class My_Published_ads_fragment extends Fragment{
                 // List<Response_Submit> data=new ArrayList(Arrays.asList(response.body()));
                 List<Response> data = response.body();
                 responses = data;
-                recyclerForMyAds = new RecyclerForMyAds(getActivity(),data);
+                recyclerForMyAds = new RecyclerForMyAds(getActivity(),preferences,data);
                 recyclerView.setAdapter(recyclerForMyAds);
                 recyclerForMyAds.notifyDataSetChanged();
 

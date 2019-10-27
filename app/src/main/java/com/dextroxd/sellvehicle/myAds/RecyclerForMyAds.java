@@ -50,11 +50,11 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
         viewForeground = view.findViewById(R.id.view_foreground);
     }
 }
-    public RecyclerForMyAds(Context context, List<Response> houseList) {
+    public RecyclerForMyAds(Context context,SharedPreferences preferences, List<Response> houseList) {
         this.context=context;
         this.houseList = houseList;
         mApiInterface = ApiUtils.getAPIService();
-        preferences = context.getApplicationContext().getSharedPreferences("Litstays",0);
+        this.preferences = preferences;
     }
 
 

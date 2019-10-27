@@ -31,6 +31,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.support.design.widget.Snackbar;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -47,6 +48,7 @@ import com.dextroxd.sellvehicle.network.ApiUtils;
 import com.dextroxd.sellvehicle.network.PostProperty.model.Response_Submit;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -166,7 +168,7 @@ public class SellFragment extends Fragment {
         pickImages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(hasStoragePermission(2)){
+                if(hasStoragePermission(2)&&hasWritinStoragePermission(2)){
                     imagesUriArrayList.clear();
                     Intent intent = new Intent(Intent.ACTION_PICK,
                             android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -197,6 +199,7 @@ public class SellFragment extends Fragment {
 //                    Log.d(TAG, "requestUploadSurvey: survey image " + index + "  " + surveyModel.getPicturesList().get(index).getImagePath());
 //                    File file = new File(getPath(getActivity(),imagesUriArrayList.get(index)));
                         File file = new File(getImagePathFromUri(imagesUriArrayList.get(index)));
+                        file = saveBitmapToFile(file);
 
 //                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
 //                        Uri uri = imagesUriArrayList.get(index);
@@ -369,7 +372,7 @@ public class SellFragment extends Fragment {
                                 });
                         snackbar.setActionTextColor(Color.BLUE);
                         View sbView = snackbar.getView();
-                        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                        TextView textView = (TextView) sbView.findViewById(R.id.snackbar_text);
                         textView.setTextColor(Color.rgb(132,255,255));
                         snackbar.show();
 
@@ -386,6 +389,8 @@ public class SellFragment extends Fragment {
                             pickImages.setText("Pick Image");
                         Toast.makeText(getActivity(),"You have selected "+imagesUriArrayList.get(0)+" images",Toast.LENGTH_SHORT).show();
                     }
+
+
                 }
 
 
@@ -412,6 +417,21 @@ public class SellFragment extends Fragment {
         } else {
             return true;
         }
+
+    }
+
+    private boolean hasWritinStoragePermission(int requestCode){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, requestCode);
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return true;
+        }
+
     }
 
 
@@ -464,5 +484,50 @@ public static String getImagePathFromUri(@Nullable Uri aUri) {
         }
         return path;
     }
+    public File saveBitmapToFile(File file){
+        try {
+
+            // BitmapFactory options to downsize the image
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            o.inSampleSize = 6;
+            // factor of downsizing the image
+
+            FileInputStream inputStream = new FileInputStream(file);
+            //Bitmap selectedBitmap = null;
+            BitmapFactory.decodeStream(inputStream, null, o);
+            inputStream.close();
+
+            // The new size we want to scale to
+            final int REQUIRED_SIZE=50;
+
+            // Find the correct scale value. It should be the power of 2.
+            int scale = 1;
+            while(o.outWidth / scale / 2 >= REQUIRED_SIZE &&
+                    o.outHeight / scale / 2 >= REQUIRED_SIZE) {
+                scale *= 2;
+            }
+
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            o2.inSampleSize = scale;
+            inputStream = new FileInputStream(file);
+
+            Bitmap selectedBitmap = BitmapFactory.decodeStream(inputStream, null, o2);
+            inputStream.close();
+
+            // here i override the original image file
+            file.createNewFile();
+            FileOutputStream outputStream = new FileOutputStream(file);
+
+            selectedBitmap.compress(Bitmap.CompressFormat.JPEG, 100 , outputStream);
+
+            return file;
+        } catch (Exception e) {
+            Log.e("hfebvbkd",e.getMessage());
+            Toast.makeText(getActivity(),e.getMessage(),Toast.LENGTH_LONG).show();
+            return file;
+        }
+    }
+
 }
 
