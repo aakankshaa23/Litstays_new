@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -40,13 +41,14 @@ import retrofit2.Callback;
  */
 public class Filter_fragment extends Fragment {
     SeekBar rent_seekbar;
-    TextView text_rent,text_duration,text_distance,location_filter;
-    String location;
+    TextView text_rent,text_duration,text_distance;
+    EditText location_filt;
     int max=50000;int min=1000;int current=1000;// max , min,current are related to rent_seekbar
     boolean bachelorsAllowed = false;
     int selected_bedroom = 4;
     private GridAdapter gridAdapter;
     private ApiInterface mApiInterface;
+    Boolean boys,girls;
     int selected_furnishing = 1;
     private RecyclerView recyclerView;
     Button apply_filter;
@@ -78,8 +80,11 @@ public class Filter_fragment extends Fragment {
 
         rent_seekbar=view.findViewById(R.id.seekBar);
         rent_seekbar.setMax(max);
+
         apply_filter = view.findViewById(R.id.apply_filter_button);
-        location_filter=view.findViewById(R.id.location_filter);
+        //location_filt=view.findViewById(R.id.location_filter);
+      //  hashMap.put("location",location_filt.getText().toString());
+
         rent_seekbar.setProgress(current);
         text_rent.setText(""+current);
         rent_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -116,6 +121,30 @@ public class Filter_fragment extends Fragment {
 
             }
         });
+        RadioGroup gender_filter=view.findViewById(R.id.radiogroup4);
+        gender_filter.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if(checkedId==R.id.boys_filter){
+                    boys=true;
+                    girls=false;
+                    hashMap.put("boysAllowed",true);
+                    hashMap.put("girlsAllowed",false);
+                }
+                else if(checkedId==R.id.girls_filter){
+                    boys=false;
+                    girls=true;
+                    hashMap.put("boysAllowed",false);
+                    hashMap.put("girlsAllowed",true);
+                }
+                else{
+                    boys=true;
+                    girls=true;
+                    hashMap.put("boysAllowed",true);
+                    hashMap.put("girlsAllowed",true);
+                }
+            }
+        });
         RadioGroup radio_bedroom = view.findViewById(R.id.radiogroup2);
         radio_bedroom.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -148,17 +177,17 @@ public class Filter_fragment extends Fragment {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if(checkedId==R.id.unfurnished){
                     selected_furnishing=0;
-                    hashMap.put("furnishing",selected_furnishing);
+                    hashMap.put("furnished",selected_furnishing);
 
                 }
                 else if(checkedId==R.id.semifurnished){
                     selected_furnishing=1;
-                    hashMap.put("furnishing",selected_furnishing);
+                    hashMap.put("furnished",selected_furnishing);
 
                 }
-                else{
+                else if(checkedId==R.id.fullyfurnished){
                     selected_furnishing=2;
-                    hashMap.put("furnishing",selected_furnishing);
+                    hashMap.put("furnished",selected_furnishing);
 
                 }
             }
@@ -177,6 +206,7 @@ public class Filter_fragment extends Fragment {
 //                response.setMaxPrice(current);
 //                response.setFurnishing(selected_furnishing);
                 Log.e("selected filter",hashMap.toString());
+//                Toast.makeText(getContext(),location_filt.getText().toString().trim(),Toast.LENGTH_SHORT).show();
                 ((ExploreFragment)getParentFragment()).searchProperty(hashMap);
                 getFragmentManager().popBackStackImmediate();
             }

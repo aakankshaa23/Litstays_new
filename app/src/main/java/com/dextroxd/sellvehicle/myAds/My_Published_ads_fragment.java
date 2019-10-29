@@ -11,12 +11,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import com.dextroxd.sellvehicle.R;
 import com.dextroxd.sellvehicle.network.ApiInterface;
 import com.dextroxd.sellvehicle.network.ApiUtils;
 import com.dextroxd.sellvehicle.network.PostProperty.model.Response;
 import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +33,10 @@ public class My_Published_ads_fragment extends Fragment{
     private ApiInterface mApiInterface;
     SharedPreferences preferences;
     List<Response> responses;
+    int flag=0;
+
     private RecyclerForMyAds recyclerForMyAds;
+    TextView visible;
     private SkeletonScreen skeletonScreen;
     public My_Published_ads_fragment() {
         // Required empty public constructor
@@ -40,6 +48,7 @@ public class My_Published_ads_fragment extends Fragment{
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_my_published_ads_fragment, container, false);
         mApiInterface = ApiUtils.getAPIService();
+        visible=view.findViewById(R.id.invisible);
         recyclerView = view.findViewById(R.id.id_recycler_myads);
         responses = new ArrayList<>();
         preferences = getActivity().getApplicationContext().getSharedPreferences("Litstays",0);
@@ -50,11 +59,21 @@ public class My_Published_ads_fragment extends Fragment{
             public void onResponse(Call<List<Response>> call, retrofit2.Response<List<Response>> response) {
                 Log.e("Hell",response.body().toString());
                 // List<Response_Submit> data=new ArrayList(Arrays.asList(response.body()));
-                List<Response> data = response.body();
+             List<Response> data = response.body();
                 responses = data;
-                recyclerForMyAds = new RecyclerForMyAds(getActivity(),preferences,data);
-                recyclerView.setAdapter(recyclerForMyAds);
-                recyclerForMyAds.notifyDataSetChanged();
+                if(data.isEmpty()){
+
+
+                    visible.setVisibility(View.VISIBLE);
+
+                }
+                else {
+
+                    visible.setVisibility(View.GONE);
+                    recyclerForMyAds = new RecyclerForMyAds(getActivity(), preferences, data);
+                    recyclerView.setAdapter(recyclerForMyAds);
+                    recyclerForMyAds.notifyDataSetChanged();
+                }
 
             }
 
@@ -64,6 +83,7 @@ public class My_Published_ads_fragment extends Fragment{
             }
         });
         enableSwipeToDeleteAndUndo();
+
         skeletonScreen = Skeleton.bind(recyclerView).adapter(recyclerForMyAds).shimmer(true).count(10).load(R.layout.skeleton_view).show();
         return view;
     }

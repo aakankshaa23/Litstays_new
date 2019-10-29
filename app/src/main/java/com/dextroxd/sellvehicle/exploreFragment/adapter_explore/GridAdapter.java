@@ -34,17 +34,20 @@ import retrofit2.Callback;
 
 public class GridAdapter extends RecyclerView.Adapter<GridAdapter.MyViewHolder>{
     private ArrayList<ModelCard>a1=new ArrayList<>();
-    private TextView cost,bedroom,furnishing;
+    private TextView cost,bedroom;
     private ApiInterface mApiInterface;
     SharedPreferences preferences;
     private Context context;
     private List<Response> houseList;
+    Boolean boys,girls;
+    String gender;
     boolean b = false;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView cost, bedroom, size,location,furnishing;
         public ImageView image_house;
         ImageView like_button;
+
         public MyViewHolder(View view) {
             super(view);
             cost = view.findViewById(R.id.cost_sell);
@@ -75,17 +78,32 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.MyViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, final int i) {
         final Response response = houseList.get(i);
-        String furnishing;
+        String furnishing="none";
         if(response.getFurnished()==0)
-            furnishing="NOT FURNISHED";
+            furnishing="None";
                     else if(response.getFurnished()==1)
-                        furnishing="SEMI-FURNISHED";
-                    else
-                        furnishing="FULLY_FURNISHED";
+                        furnishing="Semi";
+                    else if(response.getFurnished()==2)
+                        furnishing="Fully";
         myViewHolder.cost.setText("RENT- ₹"+String.valueOf(response.getPrice()));
-        myViewHolder.bedroom.setText("BEDROOMS- "+String.valueOf(response.getBedroom()));
-        myViewHolder.furnishing.setText("FURNISHING- "+furnishing);
-        myViewHolder.size.setText("AREA- "+String.valueOf(response.getArea()));
+        myViewHolder.bedroom.setText("Bedrooms-     "+String.valueOf(response.getBedroom()));
+        myViewHolder.furnishing.setText("Furnishing-     "+furnishing);
+        if(response.getBoysallowed()==true&&response.getGirlsallowed()==false){
+            boys=true;
+            girls=false;
+            gender="Boys";
+        }
+        else if(response.getGirlsallowed()==true&&response.getBoysallowed()==false){
+            boys=false;
+            girls=true;
+            gender="Girls";
+        }
+        else{
+            boys=true;
+            girls=true;
+            gender="Both";
+        }
+        myViewHolder.size.setText("Boys/Girls-     "+gender);
         myViewHolder.location.setText(String.valueOf(response.getLocation()));
         com.dextroxd.sellvehicle.network.RequestofId.Response response1 = new com.dextroxd.sellvehicle.network.RequestofId.Response();
         response1.setId(houseList.get(i).get_id());
@@ -98,12 +116,17 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.MyViewHolder>{
                 Response responsesProperty = houseList.get(i);
                 Intent in=new Intent(context, cardActivity.class);
                 in.putExtra("Cost",String.valueOf(responsesProperty.getPrice()));
+                in.putExtra("Title",String.valueOf(responsesProperty.getName()));
+               // Toast.makeText(GridAdapter.this,String.valueOf(responsesProperty.get_id()),Toast.LENGTH_SHORT).show();
                 in.putExtra("Bedroom",String.valueOf(responsesProperty.getBedroom()));
+
                 in.putExtra("id",String.valueOf(responsesProperty.getListedBy()));
-                in.putExtra("Furnishing",String.valueOf(responsesProperty.isFurnished()));
+              in.putExtra("Furnishing",Integer.parseInt(String.valueOf(responsesProperty.isFurnished())));
                 in.putExtra("Type",String.valueOf(responsesProperty.getType()));
                 in.putExtra("Location",String.valueOf(responsesProperty.getLocation()));
                 in.putExtra("Bathroom",String.valueOf(responsesProperty.getBathroom()));
+                in.putExtra("Boys",responsesProperty.getBoysallowed());
+                in.putExtra("Girls",responsesProperty.getGirlsallowed());
                 in.putExtra("Facing",String.valueOf(responsesProperty.getFacing()));
                 in.putExtra("Area",String.valueOf(responsesProperty.getArea()));
                 in.putStringArrayListExtra("Array",responsesProperty.getImages());
@@ -111,7 +134,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.MyViewHolder>{
                 in.putExtra("Description",String.valueOf(responsesProperty.getDescription()));
                 in.putExtra("Floors",String.valueOf(responsesProperty.getFloors()));
                 in.putExtra("Parking",String.valueOf(responsesProperty.isParking()));
-                in.putExtra("Bachelors",String.valueOf(responsesProperty.isBachelorsAllowed()));
+                in.putExtra("Bachelors",responsesProperty.isBachelorsAllowed());
                 context.startActivity(in);
             }
         });

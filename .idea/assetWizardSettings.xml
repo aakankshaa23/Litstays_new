@@ -74,7 +74,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="scalingPercent" value="46" />
+                                                <entry key="scalingPercent" value="97" />
                                                 <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
@@ -99,8 +99,8 @@
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
                                       <entry key="backgroundLayerName" value="filter1" />
-                                      <entry key="foregroundImage" value="C:\Users\Care\Desktop\New folder\cave.svg" />
-                                      <entry key="foregroundLayerName" value="background_" />
+                                      <entry key="foregroundImage" value="C:\Users\Care\Desktop\logo.jpg" />
+                                      <entry key="foregroundLayerName" value="ic_launcher_round" />
                                       <entry key="outputName" value="background" />
                                     </map>
                                   </option>

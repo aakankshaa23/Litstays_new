@@ -37,16 +37,19 @@ private List<Response> houseList;
         boolean b = false;
 
 public class MyViewHolder extends RecyclerView.ViewHolder {
-    public TextView cost, bedroom, size;
+    public TextView cost, bedroom, size,furnishing,location;
     public ImageView image_house;
     ImageView like_button;
     public MyViewHolder(View view) {
         super(view);
         cost = view.findViewById(R.id.cost_sell);
+
         bedroom = view.findViewById(R.id.bedroom_sell);
         size = view.findViewById(R.id.size_sell);
         like_button = view.findViewById(R.id.likebutton);
         image_house = view.findViewById(R.id.imageView_house);
+        furnishing=view.findViewById(R.id.furnishing);
+        location=view.findViewById(R.id.locationofsale);
         like_button = view.findViewById(R.id.likebutton);
     }
 }
@@ -68,9 +71,31 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
     @Override
     public void onBindViewHolder(@NonNull final FavouriteAdapter.MyViewHolder myViewHolder, final int i) {
         final Response response = houseList.get(i);
-        myViewHolder.cost.setText(String.valueOf(response.getPrice()));
-        myViewHolder.bedroom.setText(String.valueOf(response.getBedroom()));
-        myViewHolder.size.setText(String.valueOf(response.getArea()));
+        String furnishing="none";
+        if(response.getFurnished()==0)
+            furnishing="None";
+        else if(response.getFurnished()==1)
+            furnishing="Semi";
+        else if(response.getFurnished()==2)
+            furnishing="Fully";
+        myViewHolder.cost.setText("RENT- ₹"+String.valueOf(response.getPrice()));
+        myViewHolder.bedroom.setText("Bedrooms-     "+String.valueOf(response.getBedroom()));
+        myViewHolder.furnishing.setText("Furnishing-     "+furnishing);
+        String gender;
+        if(response.getBoysallowed()==true&&response.getGirlsallowed()==false){
+
+            gender="Boys";
+        }
+        else if(response.getGirlsallowed()==true&&response.getBoysallowed()==false){
+
+            gender="Girls";
+        }
+        else{
+
+            gender="Both";
+        }
+        myViewHolder.size.setText("Boys/Girls-     "+gender);
+        myViewHolder.location.setText(String.valueOf(response.getLocation()));
         com.dextroxd.sellvehicle.network.RequestofId.Response response1 = new com.dextroxd.sellvehicle.network.RequestofId.Response();
         response1.setId(houseList.get(i).get_id());
 
@@ -83,12 +108,16 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
                 Intent in=new Intent(context, cardActivity.class);
                 in.putExtra("Cost",String.valueOf(responsesProperty.getPrice()));
                 in.putExtra("Bedroom",String.valueOf(responsesProperty.getBedroom()));
+                in.putExtra("id",String.valueOf(responsesProperty.getListedBy()));
                 in.putExtra("Furnishing",String.valueOf(responsesProperty.isFurnished()));
+                in.putExtra("Title",String.valueOf(responsesProperty.getName()));
                 in.putExtra("Type",String.valueOf(responsesProperty.getType()));
+                in.putExtra("Location",String.valueOf(responsesProperty.getLocation()));
                 in.putExtra("Bathroom",String.valueOf(responsesProperty.getBathroom()));
                 in.putExtra("Facing",String.valueOf(responsesProperty.getFacing()));
                 in.putExtra("Area",String.valueOf(responsesProperty.getArea()));
                 in.putStringArrayListExtra("Array",responsesProperty.getImages());
+
                 in.putExtra("Description",String.valueOf(responsesProperty.getDescription()));
                 in.putExtra("Floors",String.valueOf(responsesProperty.getFloors()));
                 in.putExtra("Parking",String.valueOf(responsesProperty.isParking()));

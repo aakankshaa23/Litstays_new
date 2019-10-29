@@ -247,13 +247,62 @@
                    android:text="Fully" />
 
            </RadioGroup>
+           <TextView
+               android:id="@+id/gender"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_below="@+id/radiogroup3"
+               android:layout_centerHorizontal="true"
+               android:textColor="#84FFFF"
+               android:fontFamily="@font/psr"
+               android:layout_marginTop="14dp"
+               android:text=" Boys/Girls"
+               android:textStyle="bold"
+               android:textSize="20dp" />
+           <RadioGroup
+               android:layout_width="match_parent"
+               android:layout_below="@id/gender"
+               android:layout_marginTop="20dp"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal"
+               android:id="@+id/radiogroup4">
+               <RadioButton
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Boys"
+                   android:id="@+id/boys_filter"
+                   android:layout_weight="1"
+                   android:backgroundTint="#84ffff"
+                   android:textColor="#84ffff"
+                   android:buttonTint="#84ffff"/>
+               <RadioButton
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Girls"
+                   android:backgroundTint="#84ffff"
+                   android:layout_weight="1"
+                   android:buttonTint="#84ffff"
+                   android:textColor="#84ffff"
+                   android:id="@+id/girls_filter"/>
+               <RadioButton
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Both"
+                   android:id="@+id/both_filter"
+                   android:backgroundTint="#84ffff"
+                   android:buttonTint="#84ffff"
+                   android:layout_weight="1"
+                   android:textColor="#84ffff"/>
+
+           </RadioGroup>
+
            <Button
                android:id="@+id/apply_filter_button"
                android:padding="10dp"
                style="@android:style/Widget.Material.Button.Colored"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:layout_below="@id/radiogroup3"
+               android:layout_below="@id/radiogroup4"
                android:layout_marginBottom="5dp"
                android:layout_marginTop="16dp"
                android:layout_centerHorizontal="true"

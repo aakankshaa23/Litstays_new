@@ -56,7 +56,6 @@
                     android:textColor="@android:color/black"
                     android:maxLines="1"
                     android:fontFamily="@font/psr"
-                    android:textAllCaps="true"
                     android:textSize="16sp"
                     android:id="@+id/bedroom_sell"/>
                 <TextView

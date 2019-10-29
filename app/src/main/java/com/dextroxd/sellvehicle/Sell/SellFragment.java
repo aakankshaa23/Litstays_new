@@ -70,6 +70,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.app.Activity.RESULT_OK;
+import static android.widget.RadioGroup.*;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
@@ -84,6 +85,8 @@ public class SellFragment extends Fragment {
     Button submit_button;
     Animation animFadein;
     int codeofbutton = 0;
+    Boolean boys_s,girls_s;
+    RadioGroup gender;
     int furnished = 0;
     SharedPreferences preferences;
     Button pickImages;
@@ -99,13 +102,33 @@ public class SellFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        if(!isConnected(getContext()))buildDialog(getContext()).show();
-         View view = inflater.inflate(R.layout.fragment_sell, container, false);
+        if (!isConnected(getContext())) buildDialog(getContext()).show();
+        View view = inflater.inflate(R.layout.fragment_sell, container, false);
         animFadein = AnimationUtils.loadAnimation(view.getContext(),
                 R.anim.fade_in);
         view.startAnimation(animFadein);
         mApiInterface = ApiUtils.getAPIService();
         imagesUriArrayList = new ArrayList<>();
+        gender=view.findViewById(R.id.radio_gender);
+        gender.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if(checkedId==R.id.boys){
+                    boys_s=true;
+                    girls_s=false;
+                }
+                else if(checkedId==R.id.girls){
+                    boys_s=false;
+                    girls_s=true;
+                }
+                else{
+                    boys_s=true;
+                    girls_s=true;
+                }
+            }
+        });
+
+
         preferences = getActivity().getApplicationContext().getSharedPreferences("Litstays",0);
         title=(EditText)view.findViewById(R.id.id_Ad);
         final TextView textView_ad=(TextView)view.findViewById(R.id.id_count_ad);
@@ -128,7 +151,7 @@ public class SellFragment extends Fragment {
         radioButtonParkingN = view.findViewById(R.id.radio_buttonN);
         radioButton = view.findViewById(R.id.radio_yes);
         radioButton1 = view.findViewById(R.id.radio_no);
-        radioGroup1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        radioGroup1.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if(checkedId ==R.id.radio_buttonY){
@@ -139,7 +162,7 @@ public class SellFragment extends Fragment {
                 }
             }
         });
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        radioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if(checkedId ==R.id.radio_yes){
@@ -150,7 +173,7 @@ public class SellFragment extends Fragment {
                 }
             }
         });
-        furnishing.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        furnishing.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if(checkedId==R.id.notfur){
@@ -226,7 +249,7 @@ public class SellFragment extends Fragment {
                     }
                     mApiInterface.submitProperty(preferences.getString("auth_Token", "hell"), title.getText().toString().trim(), description.getText().toString().trim()
                             , Integer.parseInt(floors.getText().toString().trim()), parking, facing.getText().toString().trim(), ImagesArr, type.getText().toString().trim(), Integer.parseInt(bedroooms.getText().toString().trim()), Integer.parseInt(bathrooms.getText().toString().trim()), furnished,
-                            bachelorsallowed, Integer.parseInt(area.getText().toString().trim()), Integer.parseInt(rent.getText().toString().trim()), 2000, location.getText().toString().trim()).enqueue(new Callback<Response_Submit>() {
+                            bachelorsallowed, Integer.parseInt(area.getText().toString().trim()), Integer.parseInt(rent.getText().toString().trim()), 2000, location.getText().toString().trim(),boys_s,girls_s).enqueue(new Callback<Response_Submit>() {
                         @Override
                         public void onResponse(Call<Response_Submit> call, Response<Response_Submit> response) {
                             if (response.code() == 200) {
@@ -276,6 +299,15 @@ public class SellFragment extends Fragment {
                 Toast.makeText(getActivity(), "Please fill all the fields", Toast.LENGTH_SHORT).show();
                 return 1;
 
+        }
+        if(Integer.parseInt(bedroooms.getText().toString())<=0)
+        {
+            Toast.makeText(getActivity(),"Please enter valid bedroom count",Toast.LENGTH_SHORT).show();
+            return 1;
+        }
+        if(location.getText().toString().trim()==null){
+            Toast.makeText(getActivity(),"Please enter valid location",Toast.LENGTH_SHORT).show();
+            return 1;
         }
         return 0;
 

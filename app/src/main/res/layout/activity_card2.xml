@@ -63,13 +63,13 @@
                     android:fontFamily="@font/psr"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/type_sell"
+                    android:id="@+id/title_sell"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginRight="16dp"
                     android:layout_marginBottom="4dp"
                     android:maxLines="1"
-                    android:text="Type"
+                    android:text="Title"
                     android:textStyle="normal"
                     android:textColor="#84ffff"
                     android:textSize="12sp" />
@@ -109,6 +109,32 @@
                 android:textStyle="normal"
                 android:textColor="#84ffff"
                 android:textSize="26sp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
+
+
+                <TextView
+                    android:fontFamily="@font/psr"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:textStyle="normal"
+                    android:text="Type"
+                    android:textColor="#84ffff"
+                    android:textSize="16sp" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="#84ffff"
+                    android:textStyle="normal"
+                    android:id="@+id/type_sell"/>
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -281,6 +307,32 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
+
+
+                <TextView
+                    android:fontFamily="@font/psr"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:textStyle="normal"
+                    android:text="Boys/Girls"
+                    android:textColor="#84ffff"
+                    android:textSize="16sp" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="#84ffff"
+                    android:textStyle="normal"
+                    android:id="@+id/gender_card"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:orientation="horizontal">
                 <TextView
@@ -354,21 +406,54 @@
                 android:layout_marginTop="4dp"
                 android:textColor="#84ffff"
                 android:textSize="26sp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+
+                android:layout_height="wrap_content">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="48dp"
+                    android:layout_marginTop="15dp"
+                    android:id="@+id/profile_card"
+                    android:background="@drawable/rounded_button"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_person_black_24dp"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/contact_name"
+                        android:text="sdfggggg"
+                        android:layout_marginTop="4dp"
+
+                        android:textColor="#84ffff"
+                        android:textAlignment="center"
+                        android:fontFamily="@font/psr"
+                        android:textSize="16sp"
+                        />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/contact"
                 android:layout_marginTop="4dp"
+                android:text="fefdesdfs"
                 android:layout_marginBottom="16dp"
                 android:textColor="#84ffff"
                 android:textAlignment="center"
                 android:fontFamily="@font/psr"
                 android:textSize="16sp"
                                 />
+                </LinearLayout>
+            </LinearLayout>
 
 
             <EditText
                 android:layout_width="match_parent"
+                android:layout_marginTop="16dp"
                 android:id="@+id/contact_email"
                 android:hint="Write here to contact to seller"
                 android:textColorHint="#84ffff"
